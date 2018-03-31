@@ -23,8 +23,8 @@ const players = {}
 
 const updatePosition = (oldPosition, direction) => {
 	return {
-		x: oldPosition.x + (direction === DIRECTIONS.right ? 1 : (direction === DIRECTIONS.left ? -1 : 0)),
-		y: oldPosition.y + (direction === DIRECTIONS.bottom ? 1 : (direction === DIRECTIONS.top ? -1 : 0)),
+		x: (oldPosition.x + (direction === DIRECTIONS.right ? 1 : (direction === DIRECTIONS.left ? -1 : 0))) % FIELD_SIZE.width,
+		y: (oldPosition.y + (direction === DIRECTIONS.bottom ? 1 : (direction === DIRECTIONS.top ? -1 : 0))) % FIELD_SIZE.height,
 	}
 }
 
@@ -37,15 +37,25 @@ wss.on('connection', (ws) => {
 
 	log('New connection')
 
+	ws.send(JSON.stringify({ 'message': 'Hello' }))
+
+	players[id] = {
+		position: {
+			x: 0,
+			y: 0,
+		},
+		direction: DIRECTIONS.right,
+		ws,
+	}
+
 	ws.on('message', (message) => {
-		players[id] = {
-			position: {
-				x: 0,
-				y: 0,
-			},
-			direction: DIRECTIONS.right,
-			ws,
+		const data = JSON.parse(message)
+
+		if (typeof data.direction === 'number' && data.direction >= 0 && data.direction <= 3) {
+			players[id].direction = data.direction
+			log('Direction changed to', players[id].direction)
 		}
+
 		log(message)
 	})
 
@@ -53,24 +63,25 @@ wss.on('connection', (ws) => {
 		log('Disconnected')
 		delete players[id]
 	})
-
-	ws.send('Hello')
 })
 
 const gameLoopId = gameLoop.setGameLoop((delta) => {
 	const ids = Object.keys(players)
-	const payload = { players: [] }
+	const rawPayload = {
+		players: [],
+	}
 
 	ids.forEach((id) => {
 		const player = players[id]
 		player.position = updatePosition(player.position, player.direction)
-		payload.players.push({
+		rawPayload.players.push({
 			id,
 			x: player.position.x,
 			y: player.position.y,
 		})
 	})
 
+	const payload = JSON.stringify(rawPayload)
 	ids.forEach((id) => {
 		const player = players[id]
 		player.ws.send(payload)

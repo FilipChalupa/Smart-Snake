@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>Smart Snake</title>
+	</head>
+	<body>
+		<script>
+			const ws = new WebSocket('ws://localhost:8080')
+
+			ws.onopen = () => {
+				 console.log('Connection established')
+			}
+
+			ws.onmessage =  (event) => {
+				 console.log('Message', event.data)
+			}
+
+			ws.onclose = () => {
+				console.log('Connection lost')
+			}
+
+			document.addEventListener('keydown', (event) => {
+				const keyName = event.key
+				let direction = null
+
+				switch (keyName) {
+					case 'ArrowUp':
+						direction = 0
+						break
+					case 'ArrowRight':
+						direction = 1
+						break
+					case 'ArrowDown':
+						direction = 2
+						break
+					case 'ArrowLeft':
+						direction = 3
+						break
+				}
+
+				if (direction !== null) {
+					ws.send(JSON.stringify({ direction }))
+				}
+			})
+		</script>
+	</body>
+</html>
