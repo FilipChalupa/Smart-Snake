@@ -41,7 +41,7 @@ function printPlayers(players) {
 }
 
 
-const ws = new WebSocket('ws://192.168.2.239:8080')
+const ws = new WebSocket('ws://localhost:8080')
 
 ws.onopen = () => {
 	console.log('Connection established')
