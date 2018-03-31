@@ -1,9 +1,9 @@
 {
   "name": "smart-snake",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "node-gameloop": "^0.1.4",

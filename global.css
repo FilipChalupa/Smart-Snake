@@ -1,0 +1,34 @@
+html, body, div {
+	margin: 0;
+	padding: 0;
+}
+
+*, *:before, *:after {
+	box-sizing: border-box;
+}
+
+body {
+	min-height: 100vh;
+}
+
+.content {
+	display: flex;
+	align-items: center;
+	min-height: 100vh;
+	background-color: #061339;
+}
+
+.playground {
+	position: relative;
+	margin: auto;
+	min-width: 350px;
+	min-height: 350px;
+	width: 50vw;
+	height: 50vw;
+	background-color: #50608F;
+}
+
+.player {
+	position: absolute;
+	background-color: black;
+}
