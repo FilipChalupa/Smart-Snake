@@ -23,8 +23,8 @@ const players = {}
 
 const updatePosition = (oldPosition, direction) => {
 	return {
-		x: (oldPosition.x + (direction === DIRECTIONS.right ? 1 : (direction === DIRECTIONS.left ? -1 : 0))) % FIELD_SIZE.width,
-		y: (oldPosition.y + (direction === DIRECTIONS.bottom ? 1 : (direction === DIRECTIONS.top ? -1 : 0))) % FIELD_SIZE.height,
+		x: ((oldPosition.x + (direction === DIRECTIONS.right ? 1 : (direction === DIRECTIONS.left ? -1 : 0))) + FIELD_SIZE.width) % FIELD_SIZE.width,
+		y: ((oldPosition.y + (direction === DIRECTIONS.bottom ? 1 : (direction === DIRECTIONS.top ? -1 : 0))) + FIELD_SIZE.height) % FIELD_SIZE.height,
 	}
 }
 
@@ -86,7 +86,7 @@ const gameLoopId = gameLoop.setGameLoop((delta) => {
 		const player = players[id]
 		player.ws.send(payload)
 	})
-}, 1000)
+}, 1000 / 30)
 
 
 process.on('SIGINT', () => {
