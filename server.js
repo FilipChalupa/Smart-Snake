@@ -64,6 +64,7 @@ wss.on('connection', (ws) => {
 			x: 0,
 			y: 0,
 		},
+		score: 0,
 		direction: DIRECTIONS.right,
 		ws,
 	}
@@ -105,6 +106,7 @@ const gameLoopId = gameLoop.setGameLoop((delta) => {
 	ids.forEach((id) => {
 		const player = players[id]
 		if (player.position.x === foodPosition.x && player.position.y === foodPosition.y) {
+			player.score++
 			randomizeFoodPosition()
 			rawPayload.food = foodPosition
 		}
