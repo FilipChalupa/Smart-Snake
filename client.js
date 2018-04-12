@@ -51,8 +51,8 @@ ws.onmessage =  (event) => {
 	console.log('Message', event.data)
 	const data = JSON.parse(event.data)
 
-	if (typeof data.players !== 'undefined') {
-		printPlayers(data.players.map((player) => ({
+	if (typeof data.positions !== 'undefined') {
+		printPlayers(data.positions.map((player) => ({
 			posX: player.x,
 			posY: player.y,
 		})))
