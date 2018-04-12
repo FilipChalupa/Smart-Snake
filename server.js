@@ -74,7 +74,6 @@ wss.on('connection', (ws) => {
 
 		if (typeof data.direction === 'number' && data.direction >= 0 && data.direction <= 3) {
 			players[id].direction = data.direction
-			log('Direction changed to', players[id].direction)
 		}
 
 		log(message)
