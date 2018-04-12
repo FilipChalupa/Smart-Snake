@@ -29,7 +29,7 @@ let MAX_Y = 50
 function printPlayers(players) {
 	for(var i in players){
 		if($("#player" + i).length === 0) {
-			$(".playground").append("<div id=\"player" + i + "\" class=\"player\"</div>")
+			$(".playground").append("<div id=\"player" + i + "\" class=\"player\"></div>")
 		}
 		$("#player" + i).css({
 			"left" : 100/MAX_X * players[i].posX + "%",
