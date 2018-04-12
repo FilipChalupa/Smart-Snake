@@ -20,6 +20,23 @@ const DIRECTIONS = {
 
 let lastClientId = 0
 const players = {}
+const foodPosition = {
+	x: 0,
+	y: 0,
+}
+
+const randomizeFoodPosition = () => {
+	foodPosition.x = Math.floor(Math.random() * FIELD_SIZE.width)
+	foodPosition.y = Math.floor(Math.random() * FIELD_SIZE.height)
+}
+
+randomizeFoodPosition()
+
+const getFoodPayload = () => {
+	return {
+		food: { ...foodPosition },
+	}
+}
 
 const updatePosition = (oldPosition, direction) => {
 	return {
@@ -37,7 +54,10 @@ wss.on('connection', (ws) => {
 
 	log('New connection')
 
-	ws.send(JSON.stringify({ 'message': 'Hello' }))
+	ws.send(JSON.stringify({
+		'message': 'Hello',
+		...getFoodPayload(),
+	}))
 
 	players[id] = {
 		position: {
@@ -74,11 +94,20 @@ const gameLoopId = gameLoop.setGameLoop((delta) => {
 	ids.forEach((id) => {
 		const player = players[id]
 		player.position = updatePosition(player.position, player.direction)
+
 		rawPayload.players.push({
 			id,
 			x: player.position.x,
 			y: player.position.y,
 		})
+	})
+
+	ids.forEach((id) => {
+		const player = players[id]
+		if (player.position.x === foodPosition.x && player.position.y === foodPosition.y) {
+			randomizeFoodPosition()
+			rawPayload.food = foodPosition
+		}
 	})
 
 	const payload = JSON.stringify(rawPayload)
