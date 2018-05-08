@@ -49,6 +49,8 @@ export default class Board {
 
 		this.xStartOffset = (this.widthInPixels - this.width * this.fieldSize) / 2
 		this.yStartOffset = (this.heightInPixels - this.height * this.fieldSize) / 2
+
+		this.draw()
 	}
 
 	public claim(x: number, y: number, content: FieldContent) {
