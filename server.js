@@ -56,11 +56,20 @@ const getScoresPayload = (playerId) => {
 	}
 }
 
+const getFieldSizePayload = () => {
+	return {
+		field: {
+			...FIELD_SIZE,
+		},
+	}
+}
+
 const getWelcomePayload = (playerId) => {
 	return {
 		welcome: {
 			id: playerId,
 		},
+		...getFieldSizePayload(),
 		...getFoodPayload(),
 		...getScoresPayload(),
 	}
