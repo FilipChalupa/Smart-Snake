@@ -1,2 +1,3 @@
-document.getElementsByTagName('h1')[0].innerHTML =
-	'Hello, TypeScript+webpack World!'
+import Game from './components/Game'
+
+const game = new Game(16, 9)
