@@ -1,12 +1,12 @@
 {
-  "name": "smart-snake",
-  "version": "0.0.1",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "node-gameloop": "^0.1.4",
-    "ws": "^5.1.0"
-  }
+	"name": "smart-snake",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"node-gameloop": "^0.1.4",
+		"ws": "^5.1.0"
+	}
 }
