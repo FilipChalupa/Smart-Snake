@@ -7,19 +7,8 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Smart Snake</title>
 	<style>
-		.playBoard {
-			position: relative;
-			outline: 1px solid;
-		}
-
-		.playBoard::before {
-			content: '';
-			display: block;
-			padding-top: 100%;
-		}
-
 		.playBoard-canvas {
-			position: absolute;
+			position: fixed;
 			top: 0;
 			left: 0;
 			right: 0;
@@ -31,7 +20,6 @@
 </head>
 
 <body>
-	<h1>Smart Snake</h1>
 	<div class="playBoard">
 		<canvas class="playBoard-canvas"></canvas>
 	</div>
