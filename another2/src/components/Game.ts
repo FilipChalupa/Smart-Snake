@@ -28,8 +28,8 @@ export default class Game {
 
 	public spawnSnake = (color: string): SnakeController => {
 		const snake = new Snake(
-			10,
-			7,
+			0,
+			0,
 			color,
 			this.board.getContent,
 			this.board.claim,
@@ -42,7 +42,7 @@ export default class Game {
 	}
 
 	public spawnFood = (): FoodController => {
-		const food = new Food(1, 2, this.board.claim, this.board.release)
+		const food = new Food(0, 1, this.board.claim, this.board.release)
 		this.foods.push(food)
 
 		return new FoodController(food)
@@ -57,10 +57,17 @@ export default class Game {
 	}
 
 	private foodRandomPlace = (food: Food) => {
-		food.updatePosition(
-			Math.floor(this.width * Math.random()),
-			Math.floor(this.height * Math.random())
-		)
+		while (true) {
+			// @TODO: fix infinite loop for full board
+			const x = Math.floor(this.width * Math.random())
+			const y = Math.floor(this.height * Math.random())
+			const content = this.board.getContent(x, y)
+
+			if (!content.isFood() && !content.isObstacle()) {
+				food.updatePosition(x, y)
+				break
+			}
+		}
 	}
 
 	private move = () => {

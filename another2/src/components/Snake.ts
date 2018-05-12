@@ -44,7 +44,7 @@ export default class Snake {
 		this.x = x
 		this.y = y
 		this.path.push({ x, y })
-		this.direction = Direction.up
+		this.direction = Direction.right
 		this.color = color
 		this.getContent = getContent
 		this.claim = (x: number, y: number) => claim(x, y, this)
