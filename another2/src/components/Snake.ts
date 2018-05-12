@@ -22,14 +22,17 @@ export default class Snake {
 	private direction: Direction
 	private hasChangedDirection: boolean = false
 	private pendingDirection: 'left' | 'right' | null = null
+	private getContent: (x: number, y: number) => BoardFieldContent
 	private claim: (x: number, y: number) => BoardFieldContentNullable
 	private release: (x: number, y: number) => void
 	private eat: (food: Food) => void
+	private alive: boolean = true
 
 	constructor(
 		x: number,
 		y: number,
 		color: string,
+		getContent: (x: number, y: number) => BoardFieldContent,
 		claim: (
 			x: number,
 			y: number,
@@ -43,6 +46,7 @@ export default class Snake {
 		this.path.push({ x, y })
 		this.direction = Direction.up
 		this.color = color
+		this.getContent = getContent
 		this.claim = (x: number, y: number) => claim(x, y, this)
 		this.release = (x: number, y: number) => release(x, y, this)
 		this.eat = eat
@@ -67,20 +71,31 @@ export default class Snake {
 	}
 
 	public move() {
+		if (!this.alive) {
+			return
+		}
+
 		const delta = positionDelta(this.direction)
+		const newX = this.x + delta.x
+		const newY = this.y + delta.y
+		const contentToClaim = this.getContent(newX, newY)
 		this.hasChangedDirection = false
-		this.x += delta.x
-		this.y += delta.y
 
+		if (contentToClaim.isObstacle()) {
+			this.alive = false
+			return
+		}
+
+		this.x = newX
+		this.y = newY
 		this.path.push({ x: this.x, y: this.y })
-		const claimedContent = this.claim(this.x, this.y)
 
-		if (claimedContent === null || !claimedContent.isFood()) {
+		const claimedContent = this.claim(this.x, this.y)
+		if (claimedContent.isFood()) {
+			this.eat(claimedContent as Food)
+		} else {
 			const tail = this.path.shift()
 			this.release(tail.x, tail.y)
-		} else {
-			//Food reached
-			this.eat(claimedContent as Food)
 		}
 
 		if (this.pendingDirection !== null) {

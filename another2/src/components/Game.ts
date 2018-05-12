@@ -31,6 +31,7 @@ export default class Game {
 			10,
 			7,
 			color,
+			this.board.getContent,
 			this.board.claim,
 			this.board.release,
 			this.eat

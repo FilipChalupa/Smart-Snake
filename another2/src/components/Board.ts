@@ -67,7 +67,7 @@ export default class Board {
 		return x >= 0 && x < this.width && y >= 0 && y < this.height
 	}
 
-	public getContent = (x: number, y: number) => {
+	public getContent = (x: number, y: number): BoardFieldContent => {
 		if (this.isInBoard(x, y)) {
 			const content = this.fields[x][y]
 			if (content) {
