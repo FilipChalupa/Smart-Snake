@@ -8,10 +8,10 @@ export default class Board {
 	private width: number
 	private height: number
 	private fields: BoardFieldContentNullable[][]
-	private playBoardCanvas: HTMLCanvasElement = document.querySelector(
-		'.playBoard-canvas'
-	)
-	private canvasContext: CanvasRenderingContext2D
+	private playBoardCanvas: HTMLCanvasElement = typeof document === 'undefined'
+		? null
+		: document.querySelector('.playBoard-canvas')
+	private canvasContext: CanvasRenderingContext2D = null
 
 	private widthInPixels: number
 	private heightInPixels: number
@@ -23,7 +23,9 @@ export default class Board {
 	//private snakes: Snake[] = []
 
 	constructor(width: number, height: number) {
-		this.canvasContext = this.playBoardCanvas.getContext('2d')
+		if (this.playBoardCanvas) {
+			this.canvasContext = this.playBoardCanvas.getContext('2d')
+		}
 
 		this.width = width
 		this.height = height
@@ -36,8 +38,10 @@ export default class Board {
 			}
 		}
 
-		window.addEventListener('resize', this.onResize)
-		this.onResize()
+		if (typeof window !== 'undefined') {
+			window.addEventListener('resize', this.onResize)
+			this.onResize()
+		}
 	}
 
 	private onResize = () => {
@@ -72,7 +76,10 @@ export default class Board {
 				this.clearField(x, y)
 			}
 			this.fields[x][y] = content
-			this.drawField(x, y)
+
+			if (this.canvasContext) {
+				this.drawField(x, y)
+			}
 			return previousContent
 		} else {
 			return null
@@ -82,7 +89,9 @@ export default class Board {
 	public release = (x: number, y: number, content: BoardFieldContent) => {
 		if (this.isInBoard(x, y) && content === this.fields[x][y]) {
 			this.fields[x][y] = null
-			this.drawField(x, y)
+			if (this.canvasContext) {
+				this.drawField(x, y)
+			}
 		}
 	}
 
