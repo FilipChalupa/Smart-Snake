@@ -1,6 +1,7 @@
 import Game from './components/Game'
 import SnakeController from './components/SnakeController'
 import MessageTypes from './constants/MessageTypes'
+import DummyAI from './components/DummyAI'
 
 class Client {
 	private game: Game = null
@@ -11,18 +12,13 @@ class Client {
 		[key: number]: number
 	} = {}
 	private socket: WebSocket
+	private spawningAI = false
 
 	constructor() {
 		this.socket = new WebSocket(`ws://${document.location.hostname}:8002`)
 
 		this.socket.onopen = () => {
 			console.log('Connection established')
-
-			const color = `rgb(${Math.floor(Math.random() * 200)},${Math.floor(
-				Math.random() * 200
-			)},${Math.floor(Math.random() * 200)})`
-			this.send(MessageTypes.addController, { color })
-			//this.send(MessageTypes.addController, { color })
 		}
 
 		this.socket.onmessage = event => {
@@ -66,6 +62,13 @@ class Client {
 		this.attachListeners()
 	}
 
+	private requestController() {
+		const color = `rgb(${Math.floor(Math.random() * 200)},${Math.floor(
+			Math.random() * 200
+		)},${Math.floor(Math.random() * 200)})`
+		this.send(MessageTypes.addController, { color })
+	}
+
 	private send(type: MessageTypes, data: any) {
 		this.socket.send(
 			JSON.stringify({
@@ -86,8 +89,21 @@ class Client {
 				this.onLocalLeft(2)
 			} else if (key === 'l') {
 				this.onLocalRight(2)
+			} else if (key === 'i') {
+				this.spawnAI()
+			} else if (key === 's') {
+				this.spawnLocal()
 			}
 		})
+	}
+
+	private spawnLocal() {
+		this.requestController()
+	}
+
+	private spawnAI() {
+		this.spawningAI = true
+		this.requestController()
 	}
 
 	private addRemoteController(data: { id: number; color: string }) {
@@ -107,12 +123,24 @@ class Client {
 	}
 
 	private addLocalController(id: number) {
-		if (typeof this.localControllers[1] === 'undefined') {
-			this.localControllers[1] = id
-		} else if (typeof this.localControllers[2] === 'undefined') {
-			this.localControllers[2] = id
+		if (this.spawningAI) {
+			this.spawningAI = false
+			new DummyAI(
+				() => {
+					this.send(MessageTypes.turnLeft, id)
+				},
+				() => {
+					this.send(MessageTypes.turnRight, id)
+				}
+			)
 		} else {
-			console.log('No more available local controllers')
+			if (typeof this.localControllers[1] === 'undefined') {
+				this.localControllers[1] = id
+			} else if (typeof this.localControllers[2] === 'undefined') {
+				this.localControllers[2] = id
+			} else {
+				console.log('No more available local controllers')
+			}
 		}
 	}
 
@@ -130,6 +158,8 @@ class Client {
 
 	private initBoard = (width: number, height: number) => {
 		this.game = new Game(width, height)
+
+		this.game.spawnFood() // @TODO remove
 	}
 
 	private tick = () => {
