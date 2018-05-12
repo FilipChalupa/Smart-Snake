@@ -24,6 +24,7 @@ export default class Snake {
 	private pendingDirection: 'left' | 'right' | null = null
 	private claim: (x: number, y: number) => BoardFieldContentNullable
 	private release: (x: number, y: number) => void
+	private eat: (food: Food) => void
 
 	constructor(
 		x: number,
@@ -34,7 +35,8 @@ export default class Snake {
 			y: number,
 			content: BoardFieldContent
 		) => BoardFieldContentNullable,
-		release: (x: number, y: number, content: BoardFieldContent) => void
+		release: (x: number, y: number, content: BoardFieldContent) => void,
+		eat: (food: Food) => void
 	) {
 		this.x = x
 		this.y = y
@@ -43,6 +45,9 @@ export default class Snake {
 		this.color = color
 		this.claim = (x: number, y: number) => claim(x, y, this)
 		this.release = (x: number, y: number) => release(x, y, this)
+		this.eat = eat
+
+		this.move()
 	}
 
 	public getDirection() {
@@ -70,7 +75,8 @@ export default class Snake {
 			const tail = this.path.shift()
 			this.release(tail.x, tail.y)
 		} else {
-			;(claimedContent as Food).eat()
+			//Food reached
+			this.eat(claimedContent as Food)
 		}
 
 		if (this.pendingDirection !== null) {

@@ -1,13 +1,15 @@
 import Board from './Board'
 import Food from './Food'
 import Snake from './Snake'
+import SnakeController from './SnakeController'
 import Direction from '../constants/directions'
+import FoodController from './FoodController'
 
 export default class Game {
 	private width: number
 	private height: number
 	private board: Board
-	private food: Food
+	private foods: Food[] = []
 	private snakes: Snake[] = []
 
 	constructor(width: number, height: number) {
@@ -15,20 +17,14 @@ export default class Game {
 		this.height = height
 
 		this.board = new Board(width, height)
-		this.food = new Food(
-			1,
-			2,
-			this.board.claim,
-			this.board.release,
-			this.foodRandomPlace
-		)
 
 		const snake1 = new Snake(
 			10,
 			7,
 			'#550055',
 			this.board.claim,
-			this.board.release
+			this.board.release,
+			this.eat
 		)
 		this.snakes.push(snake1)
 		document.addEventListener('keydown', event => {
@@ -66,15 +62,45 @@ export default class Game {
 			5,
 			'#000055',
 			this.board.claim,
-			this.board.release
+			this.board.release,
+			this.eat
 		)
 		this.snakes.push(snake2)
+	}
 
+	public spawnSnake = (): SnakeController => {
+		const snake = new Snake(
+			10,
+			7,
+			`rgb(${Math.floor(Math.random() * 200)},${Math.floor(
+				Math.random() * 200
+			)},${Math.floor(Math.random() * 200)})`,
+			this.board.claim,
+			this.board.release,
+			this.eat
+		)
+		this.snakes.push(snake)
+
+		return new SnakeController(snake)
+	}
+
+	public spawnFood = (): FoodController => {
+		const food = new Food(1, 2, this.board.claim, this.board.release)
+		this.foods.push(food)
+
+		return new FoodController(food)
+	}
+
+	public tick = () => {
 		this.move()
 	}
 
-	private foodRandomPlace = () => {
-		this.food.updatePosition(
+	public eat = (food: Food) => {
+		this.foodRandomPlace(food)
+	}
+
+	private foodRandomPlace = (food: Food) => {
+		food.updatePosition(
 			Math.floor(this.width * Math.random()),
 			Math.floor(this.height * Math.random())
 		)
@@ -91,9 +117,5 @@ export default class Game {
 				}
 			}
 		})
-
-		setTimeout(() => {
-			this.move()
-		}, 1000 / 5)
 	}
 }

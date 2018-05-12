@@ -7,19 +7,16 @@ export default class Food {
 	private y: number
 	private claim: (x: number, y: number) => void
 	private release: (x: number, y: number) => void
-	public eat: () => void
 
 	constructor(
 		x: number,
 		y: number,
 		claim: (x: number, y: number, content: BoardFieldContent) => void,
-		release: (x: number, y: number, content: BoardFieldContent) => void,
-		onEat: () => void
+		release: (x: number, y: number, content: BoardFieldContent) => void
 	) {
 		this.claim = (x: number, y: number) => claim(x, y, this)
 		this.release = (x: number, y: number) => release(x, y, this)
 		this.updatePosition(x, y)
-		this.eat = onEat
 	}
 
 	public isObstacle() {
