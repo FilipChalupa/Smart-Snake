@@ -13,11 +13,11 @@ export default class Food {
 		x: number,
 		y: number,
 		claim: (x: number, y: number, content: BoardFieldContent) => void,
-		release: (x: number, y: number) => void,
+		release: (x: number, y: number, content: BoardFieldContent) => void,
 		onEat: () => void
 	) {
 		this.claim = (x: number, y: number) => claim(x, y, this)
-		this.release = release
+		this.release = (x: number, y: number) => release(x, y, this)
 		this.updatePosition(x, y)
 		this.eat = onEat
 	}

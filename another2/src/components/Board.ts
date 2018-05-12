@@ -79,8 +79,8 @@ export default class Board {
 		}
 	}
 
-	public release = (x: number, y: number) => {
-		if (this.isInBoard(x, y)) {
+	public release = (x: number, y: number, content: BoardFieldContent) => {
+		if (this.isInBoard(x, y) && content === this.fields[x][y]) {
 			this.fields[x][y] = null
 			this.drawField(x, y)
 		}

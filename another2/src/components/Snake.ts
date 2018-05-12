@@ -34,7 +34,7 @@ export default class Snake {
 			y: number,
 			content: BoardFieldContent
 		) => BoardFieldContentNullable,
-		release: (x: number, y: number) => void
+		release: (x: number, y: number, content: BoardFieldContent) => void
 	) {
 		this.x = x
 		this.y = y
@@ -42,7 +42,7 @@ export default class Snake {
 		this.direction = Direction.up
 		this.color = color
 		this.claim = (x: number, y: number) => claim(x, y, this)
-		this.release = release
+		this.release = (x: number, y: number) => release(x, y, this)
 	}
 
 	public getDirection() {
