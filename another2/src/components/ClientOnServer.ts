@@ -36,7 +36,7 @@ export default class ClientOnServer {
 		this.socket.on('close', this.onClose)
 	}
 
-	private send(type: MessageTypes, data: any) {
+	public send(type: MessageTypes, data: any) {
 		this.socket.send(
 			JSON.stringify({
 				[type]: data,
