@@ -47,12 +47,12 @@ class Server {
 		this.loop()
 	}
 
-	private spawnSnake = (): number => {
-		const controller = this.game.spawnSnake()
+	private spawnSnake = (color: string): number => {
+		const controller = this.game.spawnSnake(color)
 		const id = controller.getId()
 
 		this.controllers[id] = controller
-		this.send(MessageTypes.addController, id)
+		this.send(MessageTypes.addController, { id, color })
 
 		return id
 	}

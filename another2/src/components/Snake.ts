@@ -50,6 +50,10 @@ export default class Snake {
 		this.move()
 	}
 
+	public getColor() {
+		return this.color
+	}
+
 	public getDirection() {
 		return this.direction
 	}

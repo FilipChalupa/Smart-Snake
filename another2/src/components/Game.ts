@@ -26,13 +26,11 @@ export default class Game {
 		}
 	}
 
-	public spawnSnake = (): SnakeController => {
+	public spawnSnake = (color: string): SnakeController => {
 		const snake = new Snake(
 			10,
 			7,
-			`rgb(${Math.floor(Math.random() * 200)},${Math.floor(
-				Math.random() * 200
-			)},${Math.floor(Math.random() * 200)})`,
+			color,
 			this.board.claim,
 			this.board.release,
 			this.eat

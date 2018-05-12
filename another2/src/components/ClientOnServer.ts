@@ -7,7 +7,7 @@ export default class ClientOnServer {
 	private log: (text: string) => void
 	private boardWidth: number
 	private boardHeight: number
-	private spawnSnake: () => number
+	private spawnSnake: (color: string) => number
 	private turnLeft: (id: number) => void
 	private turnRight: (id: number) => void
 	private onDisconnected: () => void
@@ -20,7 +20,7 @@ export default class ClientOnServer {
 		log: (text: string) => void,
 		boardWidth: number,
 		boardHeight: number,
-		spawnSnake: () => number,
+		spawnSnake: (color: string) => number,
 		turnLeft: (id: number) => void,
 		turnRight: (id: number) => void,
 		onDisconnected: () => void
@@ -72,7 +72,7 @@ export default class ClientOnServer {
 
 			switch (type) {
 				case MessageTypes.addController:
-					this.addController()
+					this.addController(data)
 					break
 				case MessageTypes.turnLeft:
 					this.onLeft(data as number)
@@ -98,8 +98,8 @@ export default class ClientOnServer {
 		}
 	}
 
-	private addController() {
-		const id = this.spawnSnake()
+	private addController(data: { color: string }) {
+		const id = this.spawnSnake(data.color)
 		this.controllers[id] = true
 		this.send(MessageTypes.toBeControlled, id)
 	}

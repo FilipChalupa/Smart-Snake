@@ -16,4 +16,8 @@ export default class SnakeController extends Controller {
 	public turnRight = () => {
 		this.snake.turnRight()
 	}
+
+	public getColor = () => {
+		this.snake.getColor()
+	}
 }

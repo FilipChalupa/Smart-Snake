@@ -17,8 +17,12 @@ class Client {
 
 		this.socket.onopen = () => {
 			console.log('Connection established')
-			this.send(MessageTypes.addController, {})
-			//this.send(MessageTypes.addController, {})
+
+			const color = `rgb(${Math.floor(Math.random() * 200)},${Math.floor(
+				Math.random() * 200
+			)},${Math.floor(Math.random() * 200)})`
+			this.send(MessageTypes.addController, { color })
+			//this.send(MessageTypes.addController, { color })
 		}
 
 		this.socket.onmessage = event => {
@@ -41,7 +45,7 @@ class Client {
 						this.addLocalController(data as number)
 						break
 					case MessageTypes.addController:
-						this.addRemoteController(data as number)
+						this.addRemoteController(data)
 						break
 					case MessageTypes.turnLeft:
 						this.onRemoteLeft(data as number)
@@ -86,8 +90,8 @@ class Client {
 		})
 	}
 
-	private addRemoteController(id: number) {
-		this.controllers[id] = this.game.spawnSnake()
+	private addRemoteController(data: { id: number; color: string }) {
+		this.controllers[data.id] = this.game.spawnSnake(data.color)
 	}
 
 	private onRemoteLeft(id: number) {
