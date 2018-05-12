@@ -1,7 +1,9 @@
 import Snake from './Snake'
 import Food from './Food'
+import Wall from './Wall'
+import Empty from './Empty'
 
-export type BoardFieldContent = Food | Snake
+export type BoardFieldContent = Food | Snake | Wall | Empty
 export type BoardFieldContentNullable = BoardFieldContent | null
 
 export default class Board {
@@ -19,8 +21,8 @@ export default class Board {
 	private xStartOffset: number
 	private yStartOffset: number
 
-	//private food: Food
-	//private snakes: Snake[] = []
+	static wall = new Wall()
+	static empty = new Empty()
 
 	constructor(width: number, height: number) {
 		if (this.playBoardCanvas) {
@@ -65,25 +67,35 @@ export default class Board {
 		return x >= 0 && x < this.width && y >= 0 && y < this.height
 	}
 
+	public getContent = (x: number, y: number) => {
+		if (this.isInBoard(x, y)) {
+			const content = this.fields[x][y]
+			if (content) {
+				return content
+			} else {
+				return Board.empty
+			}
+		} else {
+			return Board.wall
+		}
+	}
+
 	public claim = (
 		x: number,
 		y: number,
 		content: BoardFieldContent
-	): BoardFieldContentNullable => {
-		if (this.isInBoard(x, y)) {
-			const previousContent = this.fields[x][y]
-			if (previousContent !== null && this.canvasContext) {
-				this.clearField(x, y)
-			}
-			this.fields[x][y] = content
+	): BoardFieldContent => {
+		const oldContent = this.getContent(x, y)
 
-			if (this.canvasContext && this.canvasContext) {
+		if (!oldContent.isObstacle()) {
+			this.fields[x][y] = content
+			if (this.canvasContext) {
+				this.clearField(x, y)
 				this.drawField(x, y)
 			}
-			return previousContent
-		} else {
-			return null
 		}
+
+		return oldContent
 	}
 
 	public release = (x: number, y: number, content: BoardFieldContent) => {

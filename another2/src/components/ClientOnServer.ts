@@ -1,32 +1,45 @@
 import * as WebSocket from 'ws'
 import Game from './Game'
 import MessageTypes from '../constants/MessageTypes'
-import SnakeController from './SnakeController'
 
 export default class ClientOnServer {
 	private socket: WebSocket
 	private log: (text: string) => void
-	private game: Game
+	private boardWidth: number
+	private boardHeight: number
+	private spawnSnake: () => number
+	private turnLeft: (id: number) => void
+	private turnRight: (id: number) => void
 	private onDisconnected: () => void
 	private controllers: {
-		[key: string]: SnakeController
+		[key: string]: boolean
 	} = {}
-	private lastControllerId = 0
 
 	constructor(
 		socket: WebSocket,
 		log: (text: string) => void,
-		game: Game,
+		boardWidth: number,
+		boardHeight: number,
+		spawnSnake: () => number,
+		turnLeft: (id: number) => void,
+		turnRight: (id: number) => void,
 		onDisconnected: () => void
 	) {
 		this.socket = socket
 		this.log = log
-		this.game = game
+		this.boardWidth = boardWidth
+		this.boardHeight = boardHeight
+		this.spawnSnake = spawnSnake
+		this.turnLeft = turnLeft
+		this.turnRight = turnRight
 		this.onDisconnected = onDisconnected
 
 		this.log('Client connected')
 
-		this.send(MessageTypes.board, this.game.getBoardSize())
+		this.send(MessageTypes.board, {
+			width: this.boardWidth,
+			height: this.boardHeight,
+		})
 
 		this.attachListeners()
 	}
@@ -37,11 +50,15 @@ export default class ClientOnServer {
 	}
 
 	public send(type: MessageTypes, data: any) {
-		this.socket.send(
-			JSON.stringify({
-				[type]: data,
-			})
-		)
+		if (this.socket.readyState === 1) {
+			this.socket.send(
+				JSON.stringify({
+					[type]: data,
+				})
+			)
+		} else {
+			this.log('Sending data failed')
+		}
 	}
 
 	private onMessage = (raw: string) => {
@@ -70,26 +87,26 @@ export default class ClientOnServer {
 	}
 
 	private onLeft(id: number) {
-		if (typeof this.controllers[id] !== 'undefined') {
-			this.controllers[id].turnLeft()
+		if (typeof this.controllers[id]) {
+			this.turnLeft(id)
 		}
 	}
 
 	private onRight(id: number) {
-		if (typeof this.controllers[id] !== 'undefined') {
-			this.controllers[id].turnRight()
+		if (typeof this.controllers[id]) {
+			this.turnRight(id)
 		}
 	}
 
 	private addController() {
-		const id = ++this.lastControllerId
-		this.controllers[id] = this.game.spawnSnake()
-
+		const id = this.spawnSnake()
+		this.controllers[id] = true
 		this.send(MessageTypes.toBeControlled, id)
 	}
 
 	private onClose = () => {
 		this.log('Client disconnected')
+		this.onDisconnected()
 	}
 
 	// @TODO: implement ping pong with socket.terminate()

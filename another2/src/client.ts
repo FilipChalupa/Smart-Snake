@@ -4,7 +4,9 @@ import MessageTypes from './constants/MessageTypes'
 
 class Client {
 	private game: Game = null
-	private controllers: SnakeController[] = []
+	private controllers: {
+		[key: number]: SnakeController
+	} = {}
 	private localControllers: {
 		[key: number]: number
 	} = {}
@@ -16,7 +18,7 @@ class Client {
 		this.socket.onopen = () => {
 			console.log('Connection established')
 			this.send(MessageTypes.addController, {})
-			this.send(MessageTypes.addController, {})
+			//this.send(MessageTypes.addController, {})
 		}
 
 		this.socket.onmessage = event => {
@@ -37,6 +39,15 @@ class Client {
 						break
 					case MessageTypes.toBeControlled:
 						this.addLocalController(data as number)
+						break
+					case MessageTypes.addController:
+						this.addRemoteController(data as number)
+						break
+					case MessageTypes.turnLeft:
+						this.onRemoteLeft(data as number)
+						break
+					case MessageTypes.turnRight:
+						this.onRemoteRight(data as number)
 						break
 					default:
 						console.log('Message not recognised')
@@ -64,21 +75,31 @@ class Client {
 			const { key } = event
 
 			if (key === 'ArrowLeft') {
-				this.onLeft(1)
+				this.onLocalLeft(1)
 			} else if (key === 'ArrowRight') {
-				this.onRight(1)
+				this.onLocalRight(1)
 			} else if (key === 'k') {
-				this.onLeft(2)
+				this.onLocalLeft(2)
 			} else if (key === 'l') {
-				this.onRight(2)
-			} /*else if (key === ' ') {
-				controller = game.spawnSnake()
-			} else if (key === 'ArrowUp') {
-				game.tick()
-			} else if (key === 'f') {
-				game.spawnFood()
-			}*/
+				this.onLocalRight(2)
+			}
 		})
+	}
+
+	private addRemoteController(id: number) {
+		this.controllers[id] = this.game.spawnSnake()
+	}
+
+	private onRemoteLeft(id: number) {
+		if (typeof this.controllers[id] !== 'undefined') {
+			this.controllers[id].turnLeft()
+		}
+	}
+
+	private onRemoteRight(id: number) {
+		if (typeof this.controllers[id] !== 'undefined') {
+			this.controllers[id].turnRight()
+		}
 	}
 
 	private addLocalController(id: number) {
@@ -91,13 +112,13 @@ class Client {
 		}
 	}
 
-	private onLeft(localId: number) {
+	private onLocalLeft(localId: number) {
 		if (typeof this.localControllers[localId] !== 'undefined') {
 			this.send(MessageTypes.turnLeft, this.localControllers[localId])
 		}
 	}
 
-	private onRight(localId: number) {
+	private onLocalRight(localId: number) {
 		if (typeof this.localControllers[localId] !== 'undefined') {
 			this.send(MessageTypes.turnRight, this.localControllers[localId])
 		}

@@ -11,6 +11,9 @@ class Server {
 	} = {}
 	private loopCounter: number = 0
 	private game: Game
+	private controllers: {
+		[key: number]: SnakeController
+	} = {}
 
 	static port = 8002
 	static board = {
@@ -30,7 +33,11 @@ class Server {
 			this.clients[id] = new ClientOnServer(
 				socket,
 				this.log(id),
-				this.game,
+				Server.board.width,
+				Server.board.height,
+				this.spawnSnake,
+				this.turnLeft,
+				this.turnRight,
 				() => {
 					delete this.clients[id]
 				}
@@ -40,12 +47,36 @@ class Server {
 		this.loop()
 	}
 
+	private spawnSnake = (): number => {
+		const controller = this.game.spawnSnake()
+		const id = controller.getId()
+
+		this.controllers[id] = controller
+		this.send(MessageTypes.addController, id)
+
+		return id
+	}
+
+	private turnLeft = (id: number) => {
+		if (typeof this.controllers[id] !== 'undefined') {
+			this.controllers[id].turnLeft()
+			this.send(MessageTypes.turnLeft, id)
+		}
+	}
+
+	private turnRight = (id: number) => {
+		if (typeof this.controllers[id] !== 'undefined') {
+			this.controllers[id].turnRight()
+			this.send(MessageTypes.turnRight, id)
+		}
+	}
+
 	private loop = () => {
 		this.send(MessageTypes.tick, this.loopCounter)
 		this.game.tick()
 		this.loopCounter++
 
-		setTimeout(this.loop, 1000 / 1)
+		setTimeout(this.loop, 1000 / 10)
 	}
 
 	private send(type: MessageTypes, data: any) {
