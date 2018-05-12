@@ -52,7 +52,7 @@ export default class Game {
 		this.move()
 	}
 
-	public eat = (food: Food) => {
+	private eat = (food: Food) => {
 		this.foodRandomPlace(food)
 	}
 
