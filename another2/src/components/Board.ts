@@ -135,12 +135,17 @@ export default class Board {
 	public draw() {
 		const c = this.canvasContext
 
-		c.clearRect(0, 0, this.widthInPixels, this.heightInPixels)
-
 		c.beginPath()
 		c.rect(0, 0, this.widthInPixels, this.heightInPixels)
 		c.fillStyle = '#000000'
 		c.fill()
+
+		c.clearRect(
+			this.xStartOffset,
+			this.yStartOffset,
+			this.widthInPixels - 2 * this.xStartOffset,
+			this.heightInPixels - 2 * this.yStartOffset
+		)
 
 		for (let x = 0; x < this.width; x++) {
 			for (let y = 0; y < this.height; y++) {
