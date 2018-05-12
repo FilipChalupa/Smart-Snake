@@ -17,8 +17,8 @@ class Server {
 
 	static port = 8002
 	static board = {
-		width: 16,
-		height: 9,
+		width: 32,
+		height: 18,
 	}
 
 	constructor() {
