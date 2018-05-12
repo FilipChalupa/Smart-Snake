@@ -65,13 +65,6 @@ export default class Game {
 	private move = () => {
 		this.snakes.forEach((snake: Snake, i: number) => {
 			snake.move()
-			if (i === 1 && Math.random() < 0.3) {
-				if (Math.random() < 0.5) {
-					snake.turnRight()
-				} else {
-					snake.turnLeft()
-				}
-			}
 		})
 	}
 }
