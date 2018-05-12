@@ -19,6 +19,13 @@ export default class Game {
 		this.board = new Board(width, height)
 	}
 
+	public getBoardSize = () => {
+		return {
+			width: this.width,
+			height: this.height,
+		}
+	}
+
 	public spawnSnake = (): SnakeController => {
 		const snake = new Snake(
 			10,

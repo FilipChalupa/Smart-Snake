@@ -72,12 +72,12 @@ export default class Board {
 	): BoardFieldContentNullable => {
 		if (this.isInBoard(x, y)) {
 			const previousContent = this.fields[x][y]
-			if (previousContent !== null) {
+			if (previousContent !== null && this.canvasContext) {
 				this.clearField(x, y)
 			}
 			this.fields[x][y] = content
 
-			if (this.canvasContext) {
+			if (this.canvasContext && this.canvasContext) {
 				this.drawField(x, y)
 			}
 			return previousContent
