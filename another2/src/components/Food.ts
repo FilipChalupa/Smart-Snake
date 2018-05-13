@@ -1,6 +1,6 @@
 import { BoardFieldContent } from './Board'
 
-const SPACING = 0.025
+const SPACING = 0
 
 export default class Food {
 	private x: number
@@ -53,9 +53,9 @@ export default class Food {
 		c.beginPath()
 		c.fillStyle = '#FF0000'
 		c.arc(
-			xStart + fieldSize / 2,
-			yStart + fieldSize / 2,
-			fieldSize / 2 - SPACING,
+			xStart + fieldSize / 3,
+			yStart + fieldSize / 3,
+			fieldSize / 3 - SPACING,
 			0,
 			2 * Math.PI
 		)
