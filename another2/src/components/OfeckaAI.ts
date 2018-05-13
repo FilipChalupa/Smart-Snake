@@ -36,26 +36,26 @@ export default class OfeckaAI {
 		options.push({
 			direction: forwardDirection,
 			actionToTake: () => {},
-			wallDistance: 100,
-			foodDistance: 100,
+			wallDistance: Number.MAX_VALUE,
+			foodDistance: Number.MAX_VALUE,
 		})
 		options.push({
 			direction: turnLeft(forwardDirection),
 			actionToTake: this.turnLeft,
-			wallDistance: 100,
-			foodDistance: 100,
+			wallDistance: Number.MAX_VALUE,
+			foodDistance: Number.MAX_VALUE,
 		})
 		options.push({
 			direction: turnRight(forwardDirection),
 			actionToTake: this.turnRight,
-			wallDistance: 100,
-			foodDistance: 100,
+			wallDistance: Number.MAX_VALUE,
+			foodDistance: Number.MAX_VALUE,
 		})
 
 		options.forEach(option => {
 			const delta = positionDelta(option.direction)
 
-			for (let i = 1; i < 5; i++) {
+			for (let i = 1; i <= 50; i++) {
 				const content = this.getContent(
 					position.x + delta.x * i,
 					position.y + delta.y * i

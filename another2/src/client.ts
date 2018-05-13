@@ -107,9 +107,9 @@ class Client {
 
 	private spawnLocal() {
 		const color = `rgb(
-			${Math.floor(100 + Math.random() * 150)},
-			${Math.floor(100 + Math.random() * 150)},
-			${Math.floor(100 + Math.random() * 150)}
+			${Math.floor(150 + Math.random() * 100)},
+			${Math.floor(150 + Math.random() * 100)},
+			${Math.floor(150 + Math.random() * 100)}
 		)`
 		this.requestController(color)
 	}
@@ -119,8 +119,8 @@ class Client {
 
 		const color = `rgb(
 			0,
-			${type === AIType.Ofecka ? Math.floor(100 + Math.random() * 150) : 0},
-			${type === AIType.Jarjar ? Math.floor(100 + Math.random() * 150) : 0}
+			${type === AIType.Ofecka ? Math.floor(150 + Math.random() * 100) : 0},
+			${type === AIType.Jarjar ? Math.floor(150 + Math.random() * 100) : 0}
 		)`
 		this.requestController(color)
 	}
@@ -165,7 +165,11 @@ class Client {
 		} else {
 			if (typeof this.localControllers[1] === 'undefined') {
 				this.localControllers[1] = id
+			} else if (!this.controllers[this.localControllers[1]].isAlive()) {
+				this.localControllers[1] = id
 			} else if (typeof this.localControllers[2] === 'undefined') {
+				this.localControllers[2] = id
+			} else if (!this.controllers[this.localControllers[2]].isAlive()) {
 				this.localControllers[2] = id
 			} else {
 				console.log('No more available local controllers')
@@ -188,7 +192,7 @@ class Client {
 	private initBoard = (width: number, height: number) => {
 		this.game = new Game(width, height)
 
-		this.game.spawnFoods(1000)
+		this.game.spawnFoods(500)
 	}
 
 	private tick = () => {
