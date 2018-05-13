@@ -4,7 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"dependencies": {
+		"@types/random-seed": "^0.3.3",
 		"@types/ws": "^5.1.0",
+		"random-seed": "^0.3.0",
 		"ws": "^5.1.1"
 	},
 	"devDependencies": {
