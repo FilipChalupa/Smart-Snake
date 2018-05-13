@@ -10,6 +10,9 @@ export default class Board {
 	private width: number
 	private height: number
 	private fields: BoardFieldContentNullable[][]
+	private playBoard: HTMLDivElement = typeof document === 'undefined'
+		? null
+		: document.querySelector('.playBoard')
 	private playBoardCanvas: HTMLCanvasElement = typeof document === 'undefined'
 		? null
 		: document.querySelector('.playBoard-canvas')
@@ -18,8 +21,6 @@ export default class Board {
 	private widthInPixels: number
 	private heightInPixels: number
 	private fieldSize: number
-	private xStartOffset: number
-	private yStartOffset: number
 
 	static wall = new Wall()
 	static empty = new Empty()
@@ -47,18 +48,18 @@ export default class Board {
 	}
 
 	private onResize = () => {
-		this.widthInPixels = this.playBoardCanvas.clientWidth
-		this.heightInPixels = this.playBoardCanvas.clientHeight
-		this.playBoardCanvas.setAttribute('width', this.widthInPixels.toString())
-		this.playBoardCanvas.setAttribute('height', this.heightInPixels.toString())
+		const wrapperWidth = this.playBoard.clientWidth
+		const wrapperHeight = this.playBoard.clientHeight
 
-		this.fieldSize = Math.min(
-			this.widthInPixels / this.width,
-			this.heightInPixels / this.height
+		this.fieldSize = Math.floor(
+			Math.min(wrapperWidth / this.width, wrapperHeight / this.height)
 		)
 
-		this.xStartOffset = (this.widthInPixels - this.width * this.fieldSize) / 2
-		this.yStartOffset = (this.heightInPixels - this.height * this.fieldSize) / 2
+		this.widthInPixels = this.fieldSize * this.width
+		this.heightInPixels = this.fieldSize * this.height
+
+		this.playBoardCanvas.setAttribute('width', this.widthInPixels.toString())
+		this.playBoardCanvas.setAttribute('height', this.heightInPixels.toString())
 
 		this.draw()
 	}
@@ -108,22 +109,17 @@ export default class Board {
 	}
 
 	private clearField = (x: number, y: number) => {
-		const xStart = this.xStartOffset + x * this.fieldSize
-		const yStart = this.yStartOffset + y * this.fieldSize
+		const xStart = x * this.fieldSize
+		const yStart = y * this.fieldSize
 
-		this.canvasContext.clearRect(
-			Math.round(xStart),
-			Math.round(yStart),
-			Math.round(this.fieldSize),
-			Math.round(this.fieldSize)
-		)
+		this.canvasContext.clearRect(xStart, yStart, this.fieldSize, this.fieldSize)
 	}
 
 	private drawField(x: number, y: number) {
 		const content = this.fields[x][y]
 
-		const xStart = this.xStartOffset + x * this.fieldSize
-		const yStart = this.yStartOffset + y * this.fieldSize
+		const xStart = x * this.fieldSize
+		const yStart = y * this.fieldSize
 
 		if (content) {
 			content.draw(this.canvasContext, xStart, yStart, this.fieldSize)
@@ -140,12 +136,7 @@ export default class Board {
 		c.fillStyle = '#000000'
 		c.fill()
 
-		c.clearRect(
-			this.xStartOffset,
-			this.yStartOffset,
-			this.widthInPixels - 2 * this.xStartOffset,
-			this.heightInPixels - 2 * this.yStartOffset
-		)
+		c.clearRect(0, 0, this.widthInPixels, this.heightInPixels)
 
 		for (let x = 0; x < this.width; x++) {
 			for (let y = 0; y < this.height; y++) {

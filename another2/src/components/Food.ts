@@ -55,7 +55,7 @@ export default class Food {
 		c.arc(
 			xStart + fieldSize / 2,
 			yStart + fieldSize / 2,
-			fieldSize / 2 * (1 - SPACING),
+			fieldSize / 2 - SPACING,
 			0,
 			2 * Math.PI
 		)

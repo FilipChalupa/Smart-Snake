@@ -7,7 +7,7 @@ import { BoardFieldContent, BoardFieldContentNullable } from './Board'
 import { truncate } from 'fs'
 import Food from './Food'
 
-const SPACING = 0.05
+const SPACING = 1
 
 interface Position {
 	x: number
@@ -149,10 +149,10 @@ export default class Snake {
 		c.beginPath()
 		c.fillStyle = this.color
 		c.rect(
-			Math.round(xStart + SPACING * fieldSize),
-			Math.round(yStart + SPACING * fieldSize),
-			Math.round(fieldSize - 2 * SPACING * fieldSize),
-			Math.round(fieldSize - 2 * SPACING * fieldSize)
+			xStart + SPACING,
+			yStart + SPACING,
+			fieldSize - 2 * SPACING,
+			fieldSize - 2 * SPACING
 		)
 		c.fill()
 	}
