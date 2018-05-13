@@ -20,4 +20,8 @@ export default class SnakeController extends Controller {
 	public getColor = () => {
 		this.snake.getColor()
 	}
+
+	public getSnake = (): Snake => {
+		return this.snake
+	}
 }

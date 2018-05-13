@@ -6,13 +6,16 @@ import DummyAI from './components/DummyAI'
 class Client {
 	private game: Game = null
 	private controllers: {
-		[key: number]: SnakeController
+		[key: string]: SnakeController
 	} = {}
 	private localControllers: {
-		[key: number]: number
+		[key: string]: number
 	} = {}
 	private socket: WebSocket
 	private spawningAI = false
+	private ais: {
+		[key: string]: DummyAI
+	} = {}
 
 	constructor() {
 		this.socket = new WebSocket(`ws://${document.location.hostname}:8002`)
@@ -107,7 +110,9 @@ class Client {
 	}
 
 	private addRemoteController(data: { id: number; color: string }) {
-		this.controllers[data.id] = this.game.spawnSnake(data.color)
+		const controller = this.game.spawnSnake(data.color)
+		const { id } = data
+		this.controllers[id] = controller
 	}
 
 	private onRemoteLeft(id: number) {
@@ -125,7 +130,13 @@ class Client {
 	private addLocalController(id: number) {
 		if (this.spawningAI) {
 			this.spawningAI = false
-			new DummyAI(
+
+			const boardSize = this.game.getBoardSize()
+			this.ais[id] = new DummyAI(
+				boardSize.width,
+				boardSize.height,
+				this.controllers[id].getSnake(),
+				this.game.getContent,
 				() => {
 					this.send(MessageTypes.turnLeft, id)
 				},
@@ -166,6 +177,10 @@ class Client {
 		if (this.game) {
 			this.game.tick()
 		}
+
+		Object.keys(this.ais).forEach(id => {
+			this.ais[id].plan()
+		})
 	}
 }
 

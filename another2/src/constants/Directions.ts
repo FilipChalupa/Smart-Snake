@@ -5,7 +5,9 @@ enum Direction {
 	left = 3,
 }
 
-export const positionDelta = (direction: Direction) => {
+export const positionDelta = (
+	direction: Direction
+): { x: number; y: number } => {
 	switch (direction) {
 		case Direction.up:
 			return {
@@ -25,6 +27,11 @@ export const positionDelta = (direction: Direction) => {
 		case Direction.left:
 			return {
 				x: -1,
+				y: 0,
+			}
+		default:
+			return {
+				x: 0,
 				y: 0,
 			}
 	}

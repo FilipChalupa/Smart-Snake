@@ -1,4 +1,4 @@
-import Board from './Board'
+import Board, { BoardFieldContent } from './Board'
 import Food from './Food'
 import Snake from './Snake'
 import SnakeController from './SnakeController'
@@ -24,6 +24,10 @@ export default class Game {
 			width: this.width,
 			height: this.height,
 		}
+	}
+
+	public getContent = (x: number, y: number): BoardFieldContent => {
+		return this.board.getContent(x, y)
 	}
 
 	public spawnSnake = (color: string): SnakeController => {

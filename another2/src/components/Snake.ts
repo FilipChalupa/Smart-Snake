@@ -70,6 +70,13 @@ export default class Snake {
 		return false
 	}
 
+	public getPosition() {
+		return {
+			x: this.x,
+			y: this.y,
+		}
+	}
+
 	public move() {
 		if (!this.alive) {
 			return

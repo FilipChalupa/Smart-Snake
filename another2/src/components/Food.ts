@@ -27,6 +27,13 @@ export default class Food {
 		return true
 	}
 
+	public getPosition() {
+		return {
+			x: this.x,
+			y: this.y,
+		}
+	}
+
 	public updatePosition(x: number, y: number) {
 		if (this.x || this.y) {
 			this.release(this.x, this.y)
