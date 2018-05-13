@@ -29,51 +29,57 @@ export default class OfeckaAI {
 
 	public plan() {
 		const position = this.snake.getPosition()
+		const forwardDirection = this.snake.getDirection()
 
-		let canForward = false
-		let canLeft = false
-		let canRight = false
+		const options = []
 
-		const direction = this.snake.getDirection()
-		let delta = positionDelta(direction)
-		if (
-			!this.getContent(position.x + delta.x, position.y + delta.y).isObstacle()
-		) {
-			canForward = true
-		}
+		options.push({
+			direction: forwardDirection,
+			actionToTake: () => {},
+			wallDistance: 100,
+			foodDistance: 100,
+		})
+		options.push({
+			direction: turnLeft(forwardDirection),
+			actionToTake: this.turnLeft,
+			wallDistance: 100,
+			foodDistance: 100,
+		})
+		options.push({
+			direction: turnRight(forwardDirection),
+			actionToTake: this.turnRight,
+			wallDistance: 100,
+			foodDistance: 100,
+		})
 
-		const leftDirection = turnLeft(direction)
-		delta = positionDelta(leftDirection)
-		if (
-			!this.getContent(position.x + delta.x, position.y + delta.y).isObstacle()
-		) {
-			canLeft = true
-		}
+		options.forEach(option => {
+			const delta = positionDelta(option.direction)
 
-		const rightDirection = turnRight(direction)
-		delta = positionDelta(rightDirection)
-		if (
-			!this.getContent(position.x + delta.x, position.y + delta.y).isObstacle()
-		) {
-			canRight = true
-		}
+			for (let i = 1; i < 5; i++) {
+				const content = this.getContent(
+					position.x + delta.x * i,
+					position.y + delta.y * i
+				)
+				if (content.isObstacle()) {
+					option.wallDistance = i
+					break
+				} else if (content.isFood()) {
+					option.foodDistance = i
+					break
+				}
+			}
+		})
 
-		if (canForward && (canLeft || canRight) && Math.random() < 0.98) {
-			return
-		}
-
-		if (canLeft && canRight) {
-			if (Math.random() < 0.5) {
-				this.turnLeft()
+		const bestOption = options.reduce((best, current) => {
+			if (current.foodDistance < best.foodDistance) {
+				return current
+			} else if (current.wallDistance > best.wallDistance) {
+				return current
 			} else {
-				this.turnRight()
+				return best
 			}
-		} else {
-			if (canLeft) {
-				this.turnLeft()
-			} else if (canRight) {
-				this.turnRight()
-			}
-		}
+		})
+
+		bestOption.actionToTake()
 	}
 }
