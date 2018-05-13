@@ -99,7 +99,7 @@ class Client {
 				this.spawnAI(AIType.Jarjar)
 			} else if (key === 'a') {
 				this.spawnAI(AIType.Ofecka)
-			} else if (key === 's') {
+			} else if (key === 'Enter') {
 				this.spawnLocal()
 			}
 		})
@@ -192,7 +192,7 @@ class Client {
 	private initBoard = (width: number, height: number) => {
 		this.game = new Game(width, height)
 
-		this.game.spawnFoods(500)
+		this.game.spawnFoods(100)
 	}
 
 	private tick = () => {
