@@ -17,12 +17,15 @@ class Server {
 
 	static port = 8002
 	static board = {
-		width: 32,
-		height: 18,
+		width: 64,
+		height: 36,
 	}
 
 	constructor() {
 		this.game = new Game(Server.board.width, Server.board.height)
+		this.game.spawnFood()
+		this.game.spawnFood()
+		this.game.spawnFood()
 		this.game.spawnFood()
 
 		const wss = new WebSocket.Server({ port: Server.port })
@@ -76,7 +79,7 @@ class Server {
 		this.game.tick()
 		this.loopCounter++
 
-		setTimeout(this.loop, 1000 / 10)
+		setTimeout(this.loop, 1000 / 15)
 	}
 
 	private send(type: MessageTypes, data: any) {

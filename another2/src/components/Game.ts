@@ -49,6 +49,7 @@ export default class Game {
 	public spawnFood = (): FoodController => {
 		const food = new Food(0, 1, this.board.claim, this.board.release)
 		this.foods.push(food)
+		this.foodRandomPlace(food)
 
 		return new FoodController(food)
 	}

@@ -171,6 +171,9 @@ class Client {
 		this.game = new Game(width, height)
 
 		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
 	}
 
 	private tick = () => {
