@@ -54,6 +54,12 @@ export default class Game {
 		return new FoodController(food)
 	}
 
+	public spawnFoods = (count: number) => {
+		for (let i = 0; i < count; i++) {
+			this.spawnFood()
+		}
+	}
+
 	public tick = () => {
 		this.move()
 	}

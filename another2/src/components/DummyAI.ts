@@ -29,14 +29,17 @@ export default class DummyAI {
 
 	public plan() {
 		const position = this.snake.getPosition()
-		const possibleActions: Array<() => void> = []
+
+		let canForward = false
+		let canLeft = false
+		let canRight = false
 
 		const direction = this.snake.getDirection()
 		let delta = positionDelta(direction)
 		if (
 			!this.getContent(position.x + delta.x, position.y + delta.y).isObstacle()
 		) {
-			possibleActions.push(() => {})
+			canForward = true
 		}
 
 		const leftDirection = turnLeft(direction)
@@ -44,7 +47,7 @@ export default class DummyAI {
 		if (
 			!this.getContent(position.x + delta.x, position.y + delta.y).isObstacle()
 		) {
-			possibleActions.push(this.turnLeft)
+			canLeft = true
 		}
 
 		const rightDirection = turnRight(direction)
@@ -52,14 +55,24 @@ export default class DummyAI {
 		if (
 			!this.getContent(position.x + delta.x, position.y + delta.y).isObstacle()
 		) {
-			possibleActions.push(this.turnRight)
+			canRight = true
 		}
 
-		if (possibleActions.length > 0) {
-			if (possibleActions.length === 3 && Math.random() < 0.3) {
-				possibleActions[0]()
+		if (canForward && (canLeft || canRight) && Math.random() < 0.98) {
+			return
+		}
+
+		if (canLeft && canRight) {
+			if (Math.random() < 0.5) {
+				this.turnLeft()
 			} else {
-				possibleActions[Math.floor(Math.random() * possibleActions.length)]()
+				this.turnRight()
+			}
+		} else {
+			if (canLeft) {
+				this.turnLeft()
+			} else if (canRight) {
+				this.turnRight()
 			}
 		}
 	}

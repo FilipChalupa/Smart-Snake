@@ -65,10 +65,7 @@ class Client {
 		this.attachListeners()
 	}
 
-	private requestController() {
-		const color = `rgb(${Math.floor(Math.random() * 200)},${Math.floor(
-			Math.random() * 200
-		)},${Math.floor(Math.random() * 200)})`
+	private requestController(color: string) {
 		this.send(MessageTypes.addController, { color })
 	}
 
@@ -101,12 +98,19 @@ class Client {
 	}
 
 	private spawnLocal() {
-		this.requestController()
+		const color = `rgb(
+			0,
+			${Math.floor(Math.random() * 200)},
+			${Math.floor(Math.random() * 200)}
+		)`
+		this.requestController(color)
 	}
 
 	private spawnAI() {
 		this.spawningAI = true
-		this.requestController()
+
+		const color = `rgb(${Math.floor(Math.random() * 200)}, 0, 0)`
+		this.requestController(color)
 	}
 
 	private addRemoteController(data: { id: number; color: string }) {
@@ -170,18 +174,7 @@ class Client {
 	private initBoard = (width: number, height: number) => {
 		this.game = new Game(width, height)
 
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
-		this.game.spawnFood() // @TODO remove
+		this.game.spawnFoods(1000)
 	}
 
 	private tick = () => {

@@ -101,8 +101,10 @@ export default class Snake {
 		if (claimedContent.isFood()) {
 			this.eat(claimedContent as Food)
 		} else {
-			const tail = this.path.shift()
-			this.release(tail.x, tail.y)
+			if (this.path.length > 2) {
+				const tail = this.path.shift()
+				this.release(tail.x, tail.y)
+			}
 		}
 
 		if (this.pendingDirection !== null) {

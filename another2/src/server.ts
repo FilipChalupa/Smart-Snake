@@ -17,24 +17,14 @@ class Server {
 
 	static port = 8002
 	static board = {
-		width: 64,
-		height: 36,
+		width: 320,
+		height: 180,
 	}
 
 	constructor() {
 		this.game = new Game(Server.board.width, Server.board.height)
-		this.game.spawnFood()
-		this.game.spawnFood()
-		this.game.spawnFood()
-		this.game.spawnFood()
-		this.game.spawnFood()
-		this.game.spawnFood()
-		this.game.spawnFood()
-		this.game.spawnFood()
-		this.game.spawnFood()
-		this.game.spawnFood()
-		this.game.spawnFood()
-		this.game.spawnFood()
+
+		this.game.spawnFoods(500)
 
 		const wss = new WebSocket.Server({ port: Server.port })
 		console.log(`Server running at port ${Server.port}`)
@@ -87,7 +77,7 @@ class Server {
 		this.game.tick()
 		this.loopCounter++
 
-		setTimeout(this.loop, 1000 / 15)
+		setTimeout(this.loop, 1000 / 40)
 	}
 
 	private send(type: MessageTypes, data: any) {
