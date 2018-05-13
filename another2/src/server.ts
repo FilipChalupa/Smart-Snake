@@ -17,14 +17,14 @@ class Server {
 
 	static port = 8002
 	static board = {
-		width: 250,
-		height: 180,
+		width: 50,
+		height: 50,
 	}
 
 	constructor() {
 		this.game = new Game(Server.board.width, Server.board.height)
 
-		this.game.spawnFoods(500)
+		this.game.spawnFoods(1)
 
 		const wss = new WebSocket.Server({ port: Server.port })
 		console.log(`Server running at port ${Server.port}`)
