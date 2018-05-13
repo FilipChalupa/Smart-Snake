@@ -2,6 +2,12 @@ import Game from './components/Game'
 import SnakeController from './components/SnakeController'
 import MessageTypes from './constants/MessageTypes'
 import DummyAI from './components/DummyAI'
+import OfeckaAI from './components/OfeckaAI'
+
+enum AIType {
+	Dummy,
+	Ofecka,
+}
 
 class Client {
 	private game: Game = null
@@ -12,9 +18,9 @@ class Client {
 		[key: string]: number
 	} = {}
 	private socket: WebSocket
-	private spawningAI = false
+	private spawningAI: null | AIType = null
 	private ais: {
-		[key: string]: DummyAI
+		[key: string]: DummyAI | OfeckaAI
 	} = {}
 
 	constructor() {
@@ -90,7 +96,9 @@ class Client {
 			} else if (key === 'l') {
 				this.onLocalRight(2)
 			} else if (key === 'i') {
-				this.spawnAI()
+				this.spawnAI(AIType.Dummy)
+			} else if (key === 'a') {
+				this.spawnAI(AIType.Ofecka)
 			} else if (key === 's') {
 				this.spawnLocal()
 			}
@@ -99,17 +107,21 @@ class Client {
 
 	private spawnLocal() {
 		const color = `rgb(
-			0,
-			${Math.floor(Math.random() * 200)},
-			${Math.floor(Math.random() * 200)}
+			${Math.floor(100 + Math.random() * 150)},
+			${Math.floor(100 + Math.random() * 150)},
+			${Math.floor(100 + Math.random() * 150)}
 		)`
 		this.requestController(color)
 	}
 
-	private spawnAI() {
-		this.spawningAI = true
+	private spawnAI(type: AIType) {
+		this.spawningAI = type
 
-		const color = `rgb(${Math.floor(Math.random() * 200)}, 0, 0)`
+		const color = `rgb(
+			0,
+			${type === AIType.Dummy ? Math.floor(100 + Math.random() * 150) : 0},
+			${type === AIType.Ofecka ? Math.floor(100 + Math.random() * 150) : 0}
+		)`
 		this.requestController(color)
 	}
 
@@ -132,11 +144,13 @@ class Client {
 	}
 
 	private addLocalController(id: number) {
-		if (this.spawningAI) {
-			this.spawningAI = false
+		if (this.spawningAI !== null) {
+			this.spawningAI = null
+
+			const AI = this.spawningAI === AIType.Dummy ? DummyAI : OfeckaAI
 
 			const boardSize = this.game.getBoardSize()
-			this.ais[id] = new DummyAI(
+			this.ais[id] = new AI(
 				boardSize.width,
 				boardSize.height,
 				this.controllers[id].getSnake(),
