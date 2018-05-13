@@ -174,6 +174,14 @@ class Client {
 		this.game.spawnFood() // @TODO remove
 		this.game.spawnFood() // @TODO remove
 		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
+		this.game.spawnFood() // @TODO remove
 	}
 
 	private tick = () => {
