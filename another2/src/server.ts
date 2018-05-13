@@ -17,7 +17,7 @@ class Server {
 
 	static port = 8002
 	static board = {
-		width: 320,
+		width: 250,
 		height: 180,
 	}
 
