@@ -21,6 +21,10 @@ export default class SnakeController extends Controller {
 		this.snake.getColor()
 	}
 
+	public isAlive() {
+		return this.snake.isAlive()
+	}
+
 	public getSnake = (): Snake => {
 		return this.snake
 	}

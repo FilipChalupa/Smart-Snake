@@ -54,6 +54,10 @@ export default class Snake {
 		this.move()
 	}
 
+	public isAlive() {
+		return this.alive
+	}
+
 	public getColor() {
 		return this.color
 	}
