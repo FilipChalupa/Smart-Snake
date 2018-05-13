@@ -37,7 +37,7 @@ class Client {
 				const type = parseInt(key, 10)
 				const data = message[key]
 
-				console.log(`Message: ${MessageTypes[type]} '${JSON.stringify(data)}'`)
+				// console.log(`Message: ${MessageTypes[type]} '${JSON.stringify(data)}'`)
 
 				switch (type) {
 					case MessageTypes.board:
@@ -145,9 +145,9 @@ class Client {
 
 	private addLocalController(id: number) {
 		if (this.spawningAI !== null) {
-			this.spawningAI = null
-
 			const AI = this.spawningAI === AIType.Jarjar ? JarjarAI : OfeckaAI
+
+			this.spawningAI = null
 
 			const boardSize = this.game.getBoardSize()
 			this.ais[id] = new AI(
@@ -197,7 +197,9 @@ class Client {
 		}
 
 		Object.keys(this.ais).forEach(id => {
-			this.ais[id].plan()
+			if (this.controllers[id].isAlive()) {
+				this.ais[id].plan()
+			}
 		})
 	}
 }
