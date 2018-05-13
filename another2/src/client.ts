@@ -1,11 +1,11 @@
 import Game from './components/Game'
 import SnakeController from './components/SnakeController'
 import MessageTypes from './constants/MessageTypes'
-import DummyAI from './components/DummyAI'
+import JarjarAI from './components/JarjarAI'
 import OfeckaAI from './components/OfeckaAI'
 
 enum AIType {
-	Dummy,
+	Jarjar,
 	Ofecka,
 }
 
@@ -20,7 +20,7 @@ class Client {
 	private socket: WebSocket
 	private spawningAI: null | AIType = null
 	private ais: {
-		[key: string]: DummyAI | OfeckaAI
+		[key: string]: JarjarAI | OfeckaAI
 	} = {}
 
 	constructor() {
@@ -96,7 +96,7 @@ class Client {
 			} else if (key === 'l') {
 				this.onLocalRight(2)
 			} else if (key === 'i') {
-				this.spawnAI(AIType.Dummy)
+				this.spawnAI(AIType.Jarjar)
 			} else if (key === 'a') {
 				this.spawnAI(AIType.Ofecka)
 			} else if (key === 's') {
@@ -119,8 +119,8 @@ class Client {
 
 		const color = `rgb(
 			0,
-			${type === AIType.Dummy ? Math.floor(100 + Math.random() * 150) : 0},
-			${type === AIType.Ofecka ? Math.floor(100 + Math.random() * 150) : 0}
+			${type === AIType.Ofecka ? Math.floor(100 + Math.random() * 150) : 0},
+			${type === AIType.Jarjar ? Math.floor(100 + Math.random() * 150) : 0}
 		)`
 		this.requestController(color)
 	}
@@ -147,7 +147,7 @@ class Client {
 		if (this.spawningAI !== null) {
 			this.spawningAI = null
 
-			const AI = this.spawningAI === AIType.Dummy ? DummyAI : OfeckaAI
+			const AI = this.spawningAI === AIType.Jarjar ? JarjarAI : OfeckaAI
 
 			const boardSize = this.game.getBoardSize()
 			this.ais[id] = new AI(
