@@ -1,12 +1,29 @@
 {
-	"name": "smart-snake",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"start": "node server.js"
-	},
+	"name": "ts-webpack-starter",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
 	"dependencies": {
-		"node-gameloop": "^0.1.4",
-		"ws": "^5.1.0"
-	}
+		"@types/random-seed": "^0.3.3",
+		"@types/ws": "^5.1.0",
+		"random-seed": "^0.3.0",
+		"ws": "^5.1.1"
+	},
+	"devDependencies": {
+		"clean-webpack-plugin": "^0.1.17",
+		"html-webpack-plugin": "^2.30.1",
+		"ts-loader": "^3.1.1",
+		"typescript": "^2.6.1",
+		"webpack": "^3.8.1",
+		"webpack-dev-server": "^2.9.4"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "webpack-dev-server --host 0.0.0.0",
+		"server": "ts-node-dev --respawn src/server.ts",
+		"build": "webpack"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
 }
