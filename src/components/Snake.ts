@@ -2,7 +2,7 @@ import Direction, {
 	positionDelta,
 	turnLeft,
 	turnRight,
-} from '../constants/directions'
+} from '../constants/Directions'
 import { BoardFieldContent, BoardFieldContentNullable } from './Board'
 import { truncate } from 'fs'
 import Food from './Food'

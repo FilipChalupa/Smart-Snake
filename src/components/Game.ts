@@ -2,7 +2,7 @@ import Board, { BoardFieldContent } from './Board'
 import Food from './Food'
 import Snake from './Snake'
 import SnakeController from './SnakeController'
-import Direction from '../constants/directions'
+import Direction from '../constants/Directions'
 import FoodController from './FoodController'
 import * as randomSeed from 'random-seed'
 
