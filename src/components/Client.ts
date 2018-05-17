@@ -24,8 +24,15 @@ export default class Client {
 		[key: string]: JarjarAI | OfeckaAI
 	} = {}
 
+	static port = location.hostname === 'smart-snake.herokuapp.com' ? 443 : port
+	static protocol = location.hostname === 'smart-snake.herokuapp.com'
+		? 'wss'
+		: 'ws'
+
 	constructor() {
-		this.socket = new WebSocket(`ws://${document.location.hostname}:${port}`)
+		this.socket = new WebSocket(
+			`${Client.protocol}://${document.location.hostname}:${Client.port}`
+		)
 
 		this.socket.onopen = () => {
 			console.log('Connection established')

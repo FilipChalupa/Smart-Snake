@@ -21,13 +21,12 @@ export default class Server {
 		height: 50,
 	}
 
-	constructor() {
+	constructor(server?: any) {
 		this.game = new Game(Server.board.width, Server.board.height)
 
 		this.game.spawnFoods(1)
 
-		const wss = new WebSocket.Server({ port: port })
-		console.log(`Server running at port ${port}`)
+		const wss = new WebSocket.Server(server ? { server } : { port: port })
 		wss.on('connection', socket => {
 			const id = `${++this.lastClientId}`
 
