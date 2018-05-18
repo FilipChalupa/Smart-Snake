@@ -76,7 +76,7 @@ export default class Server {
 		this.game.tick()
 		this.loopCounter++
 
-		setTimeout(this.loop, 1000 / 40)
+		setTimeout(this.loop, 1000 / 15)
 	}
 
 	private send(type: MessageTypes, data: any) {
