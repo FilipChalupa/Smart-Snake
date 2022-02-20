@@ -4,6 +4,7 @@ import SnakeController from './SnakeController'
 import ClientOnServer from './ClientOnServer'
 import MessageTypes from '../constants/MessageTypes'
 import port from '../constants/port'
+import boardSize from '../constants/BoardSize'
 
 export default class Server {
 	private lastClientId: number = 0
@@ -17,8 +18,8 @@ export default class Server {
 	} = {}
 
 	static board = {
-		width: 50,
-		height: 50,
+		width: boardSize,
+		height: boardSize,
 	}
 
 	constructor(server?: any) {
