@@ -55,7 +55,7 @@ export default class OfeckaAI {
 		options.forEach(option => {
 			const delta = positionDelta(option.direction)
 
-			for (let i = 1; i <= 50; i++) {
+			for (let i = 1; i <= this.boardWidth; i++) {
 				const content = this.getContent(
 					position.x + delta.x * i,
 					position.y + delta.y * i
