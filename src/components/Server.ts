@@ -4,7 +4,8 @@ import SnakeController from './SnakeController'
 import ClientOnServer from './ClientOnServer'
 import MessageTypes from '../constants/MessageTypes'
 import port from '../constants/port'
-import boardSize from '../constants/BoardSize'
+import boardSize from '../constants/boardSize'
+import initialFoodCount from '../constants/initialFoodCount'
 
 export default class Server {
 	private lastClientId: number = 0
@@ -25,7 +26,7 @@ export default class Server {
 	constructor(server?: any) {
 		this.game = new Game(Server.board.width, Server.board.height)
 
-		this.game.spawnFoods(1)
+		this.game.spawnFoods(initialFoodCount)
 
 		const wss = new WebSocket.Server(server ? { server } : { port: port })
 		wss.on('connection', socket => {

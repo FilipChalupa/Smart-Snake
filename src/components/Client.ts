@@ -4,6 +4,7 @@ import MessageTypes from '../constants/MessageTypes'
 import JarjarAI from './JarjarAI'
 import OfeckaAI from './OfeckaAI'
 import port from '../constants/port'
+import initialFoodCount from '../constants/initialFoodCount'
 
 enum AIType {
 	Jarjar,
@@ -200,7 +201,7 @@ export default class Client {
 	private initBoard = (width: number, height: number) => {
 		this.game = new Game(width, height)
 
-		this.game.spawnFoods(100)
+		this.game.spawnFoods(initialFoodCount)
 	}
 
 	private tick = () => {
