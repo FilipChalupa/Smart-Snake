@@ -1,3 +1,3 @@
-const ticksPerSecond = 15
+const ticksPerSecond = 5
 
 export default ticksPerSecond

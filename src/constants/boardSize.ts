@@ -1,3 +1,3 @@
-const boardSize = 50
+const boardSize = 10
 
 export default boardSize

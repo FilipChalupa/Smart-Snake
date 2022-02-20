@@ -1,3 +1,3 @@
-const initialFoodCount = 100
+const initialFoodCount = 1
 
 export default initialFoodCount
