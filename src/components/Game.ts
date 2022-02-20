@@ -2,7 +2,6 @@ import Board, { BoardFieldContent } from './Board'
 import Food from './Food'
 import Snake from './Snake'
 import SnakeController from './SnakeController'
-import Direction from '../constants/Directions'
 import FoodController from './FoodController'
 import * as randomSeed from 'random-seed'
 
@@ -70,8 +69,9 @@ export default class Game {
 
 	private foodRandomPlace = (food: Food) => {
 		const random = randomSeed.create(JSON.stringify(food.getPosition()))
-		while (true) {
-			// @TODO: fix infinite loop for full board
+
+		let tries = 0
+		while (tries < 50) {
 			const x = random.intBetween(0, this.width - 1)
 			const y = random.intBetween(0, this.height - 1)
 			const content = this.board.getContent(x, y)
@@ -80,6 +80,7 @@ export default class Game {
 				food.updatePosition(x, y)
 				break
 			}
+			tries++
 		}
 	}
 
