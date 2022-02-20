@@ -1,7 +1,7 @@
-import Snake from './Snake'
-import Food from './Food'
-import Wall from './Wall'
 import Empty from './Empty'
+import Food from './Food'
+import Snake from './Snake'
+import Wall from './Wall'
 
 export type BoardFieldContent = Food | Snake | Wall | Empty
 export type BoardFieldContentNullable = BoardFieldContent | null
@@ -10,12 +10,14 @@ export default class Board {
 	private width: number
 	private height: number
 	private fields: BoardFieldContentNullable[][]
-	private playBoard: HTMLDivElement = typeof document === 'undefined'
-		? null
-		: document.querySelector('.playBoard')
-	private playBoardCanvas: HTMLCanvasElement = typeof document === 'undefined'
-		? null
-		: document.querySelector('.playBoard-canvas')
+	private playBoard: HTMLDivElement =
+		typeof document === 'undefined'
+			? null
+			: document.querySelector('.playBoard')
+	private playBoardCanvas: HTMLCanvasElement =
+		typeof document === 'undefined'
+			? null
+			: document.querySelector('.playBoard-canvas')
 	private canvasContext: CanvasRenderingContext2D = null
 
 	private widthInPixels: number
@@ -52,7 +54,7 @@ export default class Board {
 		const wrapperHeight = this.playBoard.clientHeight
 
 		this.fieldSize = Math.floor(
-			Math.min(wrapperWidth / this.width, wrapperHeight / this.height)
+			Math.min(wrapperWidth / this.width, wrapperHeight / this.height),
 		)
 
 		this.widthInPixels = this.fieldSize * this.width
@@ -84,7 +86,7 @@ export default class Board {
 	public claim = (
 		x: number,
 		y: number,
-		content: BoardFieldContent
+		content: BoardFieldContent,
 	): BoardFieldContent => {
 		const oldContent = this.getContent(x, y)
 
