@@ -6,6 +6,7 @@ import MessageTypes from '../constants/MessageTypes'
 import port from '../constants/port'
 import boardSize from '../constants/boardSize'
 import initialFoodCount from '../constants/initialFoodCount'
+import ticksPerSecond from '../constants/ticksPerSecond'
 
 export default class Server {
 	private lastClientId: number = 0
@@ -78,7 +79,7 @@ export default class Server {
 		this.game.tick()
 		this.loopCounter++
 
-		setTimeout(this.loop, 1000 / 15)
+		setTimeout(this.loop, 1000 / ticksPerSecond)
 	}
 
 	private send(type: MessageTypes, data: any) {
