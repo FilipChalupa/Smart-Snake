@@ -4,20 +4,20 @@
 	"description": "",
 	"main": "index.js",
 	"dependencies": {
-		"@types/express": "^4.11.1",
 		"@types/random-seed": "^0.3.3",
 		"@types/ws": "^5.1.0",
-		"express": "^4.16.3",
+		"express": "^4.17.3",
 		"random-seed": "^0.3.0",
 		"ts-node": "^6.0.3",
 		"ws": "^5.1.1"
 	},
 	"devDependencies": {
+		"@types/express": "^4.17.13",
 		"clean-webpack-plugin": "^0.1.17",
 		"html-webpack-plugin": "^2.30.1",
 		"ts-loader": "^3.1.1",
 		"ts-node-dev": "^1.0.0-pre.22",
-		"typescript": "^2.6.1",
+		"typescript": "^3.9.10",
 		"webpack": "^3.8.1",
 		"webpack-dev-server": "^2.9.4"
 	},
