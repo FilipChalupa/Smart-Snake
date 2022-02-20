@@ -23,6 +23,10 @@ export default class Board {
 	private widthInPixels: number
 	private heightInPixels: number
 	private fieldSize: number
+	private wled =
+		typeof window === 'undefined'
+			? null
+			: new WebSocket('ws://192.168.137.235/ws')
 
 	static wall = new Wall()
 	static empty = new Empty()
@@ -46,6 +50,18 @@ export default class Board {
 		if (typeof window !== 'undefined') {
 			window.addEventListener('resize', this.onResize)
 			this.onResize()
+			this.wled.onopen = () => {
+				this.wled.send(
+					JSON.stringify({
+						seg: [
+							{
+								i: [0, 100, [0, 0, 0]],
+							},
+						],
+					}),
+				)
+				this.onResize()
+			}
 		}
 	}
 
@@ -127,6 +143,28 @@ export default class Board {
 			content.draw(this.canvasContext, xStart, yStart, this.fieldSize)
 		} else {
 			this.clearField(x, y)
+		}
+		this.updateWledPixel(x, y)
+	}
+
+	private updateWledPixel(x: number, y: number) {
+		const fieldColor = this.canvasContext.getImageData(
+			(x + 0.5) * this.fieldSize,
+			(y + 0.5) * this.fieldSize,
+			1,
+			1,
+		).data
+		const [r, g, b, a] = fieldColor as any
+		if (this.wled.readyState === WebSocket.OPEN) {
+			this.wled.send(
+				JSON.stringify({
+					seg: [
+						{
+							i: [x + y * this.width, [r, g, b]],
+						},
+					],
+				}),
+			)
 		}
 	}
 
