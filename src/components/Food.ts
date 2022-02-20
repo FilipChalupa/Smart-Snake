@@ -1,7 +1,5 @@
 import { BoardFieldContent } from './Board'
 
-const SPACING = 0
-
 export default class Food {
 	private x: number
 	private y: number
@@ -12,7 +10,7 @@ export default class Food {
 		x: number,
 		y: number,
 		claim: (x: number, y: number, content: BoardFieldContent) => void,
-		release: (x: number, y: number, content: BoardFieldContent) => void
+		release: (x: number, y: number, content: BoardFieldContent) => void,
 	) {
 		this.claim = (x: number, y: number) => claim(x, y, this)
 		this.release = (x: number, y: number) => release(x, y, this)
@@ -48,16 +46,16 @@ export default class Food {
 		c: CanvasRenderingContext2D,
 		xStart: number,
 		yStart: number,
-		fieldSize: number
+		fieldSize: number,
 	) {
 		c.beginPath()
 		c.fillStyle = '#FF0000'
 		c.arc(
-			xStart + fieldSize / 3,
-			yStart + fieldSize / 3,
-			fieldSize / 3 - SPACING,
+			xStart + fieldSize / 2,
+			yStart + fieldSize / 2,
+			fieldSize / 3,
 			0,
-			2 * Math.PI
+			2 * Math.PI,
 		)
 		c.fill()
 	}
