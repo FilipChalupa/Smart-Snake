@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-npm install
+npm ci
 ```
 
 ## Development
