@@ -4,6 +4,7 @@
 
 ```bash
 npm ci
+npm run build
 ```
 
 ## How to run
